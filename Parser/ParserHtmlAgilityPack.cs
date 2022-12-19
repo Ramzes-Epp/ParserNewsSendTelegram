@@ -1,4 +1,4 @@
-﻿using HtmlAgilityPack;
+using HtmlAgilityPack;
 using ParserNewsSendTelegram.Models;
 using System;
 using System.Collections.Generic;

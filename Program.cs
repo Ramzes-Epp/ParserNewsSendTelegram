@@ -1,9 +1,8 @@
-﻿using ParserNewsSendTelegram.Models;
+using ParserNewsSendTelegram.Models;
 using ParserNewsSendTelegram.Parser;
 using ParserNewsSendTelegram.Telegram;
 
-   
- 
+    
 SendTelegram sendTelegram = new SendTelegram();
 
 //парсим сайт https://meta.ua/news/all/ с помощью библиотеки Html Agility Pack и добавляем данные в бд
