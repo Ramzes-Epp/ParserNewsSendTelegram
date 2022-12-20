@@ -11,14 +11,14 @@
  bool OpublikovanTelegram 
 		
 		
-Отправка новых новостей в Телеграмм.
+Отправка новых новостей в Телеграмм, ссылка на канал https://t.me/+pFPSnJEo3TQwZjky
 
 Сайты новостей с которыми работаем:
 Сайт https://meta.ua/news/all/ парсинг с помощью библиотеки Html Agility Pack
-Сайт https://www.ukr.net/ajax/start.json через GET запрос - парсинг обьекта JSON
+Сайт https://www.ukr.net/ajax/start.json парсинг с помощью библиотеки Html Agility Pack
 Сайт https://news.online.ua/rss/ через rss парсинг обьект XML
 
-Шаблон унифицирован  и в Program.cs легко можно подключить новые сайты.
+Шаблон унифицирован и в Program.cs легко можно подключить новые сайты.
 
 
 
