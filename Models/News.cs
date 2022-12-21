@@ -2,9 +2,11 @@ namespace ParserNewsSendTelegram.Models;
 
 internal class News
 {
-    internal Guid Id { get; set; }
+    internal int Id { get; set; } = 0;
     internal string TitleNews { get; set; }
-    internal string UrlDonorNews { get; set; }
-    internal string RubrikaNews { get; set; } = "No Category";
-    internal bool OpublikovanTelegram { get; set; } = false;
+    internal string LinkNews { get; set; }
+    internal string? UrlDonorNews { get; set; }
+    internal string? RubrikaNews { get; set; } = "No Category";
+    internal string OpublikovanTelegram { get; set; } = "no"; 
+    internal string? DateNews { get; set; }
 }

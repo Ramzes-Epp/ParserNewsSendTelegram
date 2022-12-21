@@ -1,8 +1,9 @@
+using ParserNewsSendTelegram.Data;
 using ParserNewsSendTelegram.Models;
 using ParserNewsSendTelegram.Parser;
-using ParserNewsSendTelegram.Telegram; 
+using ParserNewsSendTelegram.Telegram;
+ 
 
-     
 while (true)
 {
     //парсим сайт https://meta.ua/news/all/ с помощью библиотеки Html Agility Pack и добавляем данные в бд
@@ -16,8 +17,8 @@ while (true)
     
     Task.WaitAll(taskOnlineUa, taskmeta, taskUkrNet);
 
-    //Отправляем не опубликованные новости в телеграмм канал
-    //SendTelegram.SendMessage("https://meta.ua/");
+    //Отправляем не опубликованные новости в телеграмм канал с бд
+    SendTelegram.SendMessage();
 
     Console.WriteLine("-----------------------------");
     Thread.Sleep(600000);//Пауза 10мин

@@ -1,4 +1,5 @@
 using HtmlAgilityPack;
+using ParserNewsSendTelegram.Data;
 using ParserNewsSendTelegram.Models;
 using System.Text;
 
@@ -26,10 +27,10 @@ internal class ParserHtmlAgilityPack
 
             var node = htmlDoc.DocumentNode.SelectNodes(xPath);
 
+            //перебираем коллекцию и добавляем в БД данные
             foreach (var item in node)
-            {
-                Console.WriteLine(item.InnerText);
-                Console.WriteLine(item.GetAttributeValue("href", null));
+            { 
+                SqliteServis.AddNews(new News { TitleNews = item.InnerText, LinkNews = item.GetAttributeValue("href", null), UrlDonorNews = url});
             }
         }
         catch (Exception ex)

@@ -41,8 +41,7 @@ internal class ParserApi
 
                 if (!string.IsNullOrEmpty(resultGet))
                 {
-                    List<object> items = JsonConvert.DeserializeObject<List<object>>(resultGet);
-                    Console.WriteLine(items);
+                    List<object> items = JsonConvert.DeserializeObject<List<object>>(resultGet); 
                 }
             }
         }

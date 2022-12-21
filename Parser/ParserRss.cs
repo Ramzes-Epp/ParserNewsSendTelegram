@@ -1,4 +1,5 @@
 using HtmlAgilityPack;
+using ParserNewsSendTelegram.Data;
 using ParserNewsSendTelegram.Models;
 using ParserNewsSendTelegram.Telegram;
 using System.Net;
@@ -21,12 +22,10 @@ internal class ParserRss
             XElement ParsElement = XElement.Parse(htmlCode);//преобразовали в XMl елемент
             var items = ParsElement.Elements("channel").Elements("item");//получаем блок в котором лежат title и link  
 
-            //перебераем коллекцию и вытаскиваем ссылки и title
+            //перебираем коллекцию и добавляем в БД данные
             foreach (var item in items)
-            {
-                Console.WriteLine(item.Element("title").Value);
-                Console.WriteLine(item.Element("link").Value);
-             //   SendTelegram.SendMessage(item.Element("link").Value);
+            { 
+                SqliteServis.AddNews(new News { TitleNews = item.Element("title").Value, LinkNews = item.Element("link").Value, UrlDonorNews = url });
             }
         }
         catch (Exception ex)
