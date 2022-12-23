@@ -1,13 +1,11 @@
-using HtmlAgilityPack;
 using ParserNewsSendTelegram.Data;
 using ParserNewsSendTelegram.Models;
-using ParserNewsSendTelegram.Telegram;
 using System.Net;
 using System.Xml.Linq;
 
 namespace ParserNewsSendTelegram.Parser;
 
-internal class ParserRss
+internal class ParserXml
 {
     /// <summary>
     /// парсер Rss ленты сайта  

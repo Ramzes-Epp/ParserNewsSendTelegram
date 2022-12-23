@@ -10,7 +10,7 @@ namespace ParserNewsSendTelegram.Parser;
 /// </summary>
 internal class ParserHtmlAgilityPack
 {
-    internal static void GetNewsHtmlAgilityPack(string xPath, string url, Proxys proxy)
+    internal static void GetNewsHtmlAgilityPack(string xPath, string url, string domenDonora,  Proxys proxy)
     {
         HtmlWeb web = new HtmlWeb();
         web.OverrideEncoding = Encoding.UTF8;
@@ -29,7 +29,12 @@ internal class ParserHtmlAgilityPack
 
             //перебираем коллекцию и добавляем в БД данные
             foreach (var item in node)
-            { 
+            {
+                var strHref = item.GetAttributeValue("href", null);
+
+                if (!strHref.Contains(domenDonora))//если домена в урле нет то добовлянм
+                    strHref = domenDonora + strHref;
+
                 SqliteServis.AddNews(new News { TitleNews = item.InnerText, LinkNews = item.GetAttributeValue("href", null), UrlDonorNews = url});
             }
         }

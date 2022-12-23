@@ -1,6 +1,4 @@
 using ParserNewsSendTelegram.Data;
-using System.Net;
-using System.Security.Policy;
 
 namespace ParserNewsSendTelegram.Telegram;
 
@@ -13,26 +11,29 @@ internal class SendTelegram
     /// <summary>
     /// Отправка в ТГ сообщения со ссылкой
     /// </summary>
-    internal static void SendMessage()
-    { 
+    internal static async Task SendMessage()
+    {
         var listNews = SqliteServis.GetAllNews();
+
         foreach (var news in listNews)
         {
             if (news.OpublikovanTelegram == "yes")
                 continue;
+            Console.WriteLine("отправляем новость в тг " + news.LinkNews); 
             try
             {
-                string url = $"https://api.telegram.org/bot{token}/sendMessage?chat_id={chatId}&text={news.LinkNews}";
-                using var webClient = new WebClient();
-                webClient.DownloadString(url);
-
-                //изменяем в бд что опубликовали 
-                SqliteServis.UpdateNews(news.Id);
+                using HttpClient client = new HttpClient();
+                var url = $"https://api.telegram.org/bot{token}/sendMessage?chat_id={chatId}&text={news.LinkNews}";
+                HttpResponseMessage response = await client.GetAsync(url);
+                Console.WriteLine(response.IsSuccessStatusCode + "  LinkNews = " + news.LinkNews);
+                // изменяем в бд что опубликовали
+                if (response.IsSuccessStatusCode)
+                    SqliteServis.UpdateNews(news.Id);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("НЕ ПОЛУЧИЛОСЬ отправить в телеграмм  " + ex.Message);
             } 
-        } 
+        }
     }
 }
