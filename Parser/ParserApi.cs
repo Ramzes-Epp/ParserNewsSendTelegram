@@ -7,11 +7,11 @@ namespace ParserNewsSendTelegram.Parser;
 internal class ParserApi
 {
     /// <summary>
-    /// парсер Api сайта - через GET запрос
+    /// РїР°СЂСЃРµСЂ Api СЃР°Р№С‚Р° - С‡РµСЂРµР· GET Р·Р°РїСЂРѕСЃ
     /// </summary>
     internal void GetNews()
     {
-        // парсим сайт https://www.ukr.net/ajax/start.json через GET запрос - возращаеть обьект JSON  
+        // РїР°СЂСЃРёРј СЃР°Р№С‚ https://www.ukr.net/ajax/start.json С‡РµСЂРµР· GET Р·Р°РїСЂРѕСЃ - РІРѕР·СЂР°С‰Р°РµС‚СЊ РѕР±СЊРµРєС‚ JSON  
         string url = @"https://www.ukr.net/ajax/start.json";
         try
         {
@@ -34,8 +34,8 @@ internal class ParserApi
 
             if (resultresponse.IsSuccessStatusCode)
             {
-                string resultGet = Regex.Unescape(resultresponse.Content.ReadAsStringAsync().Result); //декодируем с Unicode
-                                                                                                      //TODO выпарсить с помощью регулярок данные с Json (resultGet) т.к сайт не коретно отдает данные (Json не полный)
+                string resultGet = Regex.Unescape(resultresponse.Content.ReadAsStringAsync().Result); //РґРµРєРѕРґРёСЂСѓРµРј СЃ Unicode
+                                                                                                      //TODO РІС‹РїР°СЂСЃРёС‚СЊ СЃ РїРѕРјРѕС‰СЊСЋ СЂРµРіСѓР»В¤СЂРѕРє РґР°РЅРЅС‹Рµ СЃ Json (resultGet) С‚.Рє СЃР°Р№С‚ РЅРµ РєРѕСЂРµС‚РЅРѕ РѕС‚РґР°РµС‚ РґР°РЅРЅС‹Рµ (Json РЅРµ РїРѕР»РЅС‹Р№)
                 resultGet = resultGet.Replace("\"", "");
                 Console.WriteLine(resultGet);
 
@@ -48,7 +48,7 @@ internal class ParserApi
 
         catch (Exception ex)
         {
-            Console.WriteLine("НЕ ПОЛУЧИЛОСЬ спарсить  " + url + " " + ex.Message);
+            Console.WriteLine("РЊв‰€ С•СњР‹вЂќвЂћВ»Р‹СњвЂ”в„– СЃРїР°СЂСЃРёС‚СЊ  " + url + " " + ex.Message);
         }
     }
 }

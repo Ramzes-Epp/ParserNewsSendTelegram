@@ -4,12 +4,12 @@ namespace ParserNewsSendTelegram.Telegram;
 
 internal class SendTelegram
 {
-    //Знаю что токен нужно прятать в диспетчер секретов, оставил здесь что бы вы могли запустить приложение 
+    //В«РЅР°СЋ С‡С‚Рѕ С‚РѕРєРµРЅ РЅСѓР¶РЅРѕ РїСЂВ¤С‚Р°С‚СЊ РІ РґРёСЃРїРµС‚С‡РµСЂ СЃРµРєСЂРµС‚РѕРІ, РѕСЃС‚Р°РІРёР» Р·РґРµСЃСЊ С‡С‚Рѕ Р±С‹ РІС‹ РјРѕРіР»Рё Р·Р°РїСѓСЃС‚РёС‚СЊ РїСЂРёР»РѕР¶РµРЅРёРµ 
     static readonly string token = "5956476617:AAFO9WMnWRA6TmpkRTOw1Jl7RQe0SpTm0KU";
     static readonly string chatId = "-1001309999215";
 
     /// <summary>
-    /// Отправка в ТГ сообщения со ссылкой
+    /// СњС‚РїСЂР°РІРєР° РІ вЂњв€љ СЃРѕРѕР±С‰РµРЅРёВ¤ СЃРѕ СЃСЃС‹Р»РєРѕР№
     /// </summary>
     internal static async Task SendMessage()
     {
@@ -19,20 +19,20 @@ internal class SendTelegram
         {
             if (news.OpublikovanTelegram == "yes")
                 continue;
-            Console.WriteLine("отправляем новость в тг " + news.LinkNews); 
+            Console.WriteLine("РѕС‚РїСЂР°РІР»В¤РµРј РЅРѕРІРѕСЃС‚СЊ РІ С‚Рі " + news.LinkNews); 
             try
             {
                 using HttpClient client = new HttpClient();
                 var url = $"https://api.telegram.org/bot{token}/sendMessage?chat_id={chatId}&text={news.LinkNews}";
                 HttpResponseMessage response = await client.GetAsync(url);
                 Console.WriteLine(response.IsSuccessStatusCode + "  LinkNews = " + news.LinkNews);
-                // изменяем в бд что опубликовали
+                // РёР·РјРµРЅВ¤РµРј РІ Р±Рґ С‡С‚Рѕ РѕРїСѓР±Р»РёРєРѕРІР°Р»Рё
                 if (response.IsSuccessStatusCode)
                     SqliteServis.UpdateNews(news.Id);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("НЕ ПОЛУЧИЛОСЬ отправить в телеграмм  " + ex.Message);
+                Console.WriteLine("РЊв‰€ С•СњР‹вЂќвЂћВ»Р‹СњвЂ”в„– РѕС‚РїСЂР°РІРёС‚СЊ РІ С‚РµР»РµРіСЂР°РјРј  " + ex.Message);
             } 
         }
     }

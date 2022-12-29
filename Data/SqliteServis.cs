@@ -1,4 +1,4 @@
-﻿using ParserNewsSendTelegram.Models;
+using ParserNewsSendTelegram.Models;
 using System;
 using System.Data.SQLite;
 

@@ -8,19 +8,19 @@ namespace ParserNewsSendTelegram.Parser;
 internal class ParserXml
 {
     /// <summary>
-    /// парсер Rss ленты сайта  
+    /// РїР°СЂСЃРµСЂ Rss Р»РµРЅС‚С‹ СЃР°Р№С‚Р°  
     /// </summary>
     internal static void GetNewsParseXml(string url)
     {
         try
         {
             using WebClient client = new WebClient();
-            var htmlCode = client.DownloadString(url);//получили html страницы
+            var htmlCode = client.DownloadString(url);//РїРѕР»СѓС‡РёР»Рё html СЃС‚СЂР°РЅРёС†С‹
 
-            XElement ParsElement = XElement.Parse(htmlCode);//преобразовали в XMl елемент
-            var items = ParsElement.Elements("channel").Elements("item");//получаем блок в котором лежат title и link  
+            XElement ParsElement = XElement.Parse(htmlCode);//РїСЂРµРѕР±СЂР°Р·РѕРІР°Р»Рё РІ XMl РµР»РµРјРµРЅС‚
+            var items = ParsElement.Elements("channel").Elements("item");//РїРѕР»СѓС‡Р°РµРј Р±Р»РѕРє РІ РєРѕС‚РѕСЂРѕРј Р»РµР¶Р°С‚ title Рё link  
 
-            //перебираем коллекцию и добавляем в БД данные
+            //РїРµСЂРµР±РёСЂР°РµРј РєРѕР»Р»РµРєС†РёСЋ Рё РґРѕР±Р°РІР»В¤РµРј РІ Р…Ж’ РґР°РЅРЅС‹Рµ
             foreach (var item in items)
             { 
                 SqliteServis.AddNews(new News { TitleNews = item.Element("title").Value, LinkNews = item.Element("link").Value, UrlDonorNews = url });
@@ -28,7 +28,7 @@ internal class ParserXml
         }
         catch (Exception ex)
         {
-            Console.WriteLine("НЕ ПОЛУЧИЛОСЬ спарсить  " + url + " " + ex.Message);
+            Console.WriteLine("РЊв‰€ С•СњР‹вЂќвЂћВ»Р‹СњвЂ”в„– СЃРїР°СЂСЃРёС‚СЊ  " + url + " " + ex.Message);
         }
     }
 }
