@@ -1,29 +1,35 @@
 using HtmlAgilityPack;
 using ParserNewsSendTelegram.Data;
 using ParserNewsSendTelegram.Models;
-using System.Text;
+using System.Net;
 
 namespace ParserNewsSendTelegram.Parser;
 
 /// <summary>
-/// парсим сайт с помощью Html Agility Pack
+/// парсинг сайта с помощью Html Agility Pack  
 /// </summary>
 internal class ParserHtmlAgilityPack
 {
-    internal static void GetNewsHtmlAgilityPack(string xPath, string url, string domenDonora,  Proxys proxy)
+    /// <summary>
+    /// парсим сайт с помощью Html Agility Pack
+    /// </summary>
+    /// <param name="xPath"></param>
+    /// <param name="url"></param>
+    /// <param name="domenDonora"></param>
+    /// <param name="proxy"></param>
+    /// <returns></returns>
+    internal async Task GetNewsHtmlAgilityPack(string xPath, string url, string domenDonora, string proxy = "")
     {
-        HtmlWeb web = new HtmlWeb();
-        web.OverrideEncoding = Encoding.UTF8;
-        HtmlDocument htmlDoc = new HtmlDocument();
+        using WebClient client = new WebClient();
+        if (proxy != "")//Устанавливаем прокси если есть
+            client.Proxy = new WebProxy(proxy, true);
 
         try
         {
-            //Устанавливаем прокси если есть
-            // TODO - прописать рандомный выбор (и чек прокси) с пула проксей
-            if (proxy.proxyPort != 0)
-                htmlDoc.LoadHtml(web.Load(url, proxy.proxyHost, proxy.proxyPort, proxy.userName, proxy.password).Text);
-            else
-                htmlDoc.LoadHtml(web.Load(url).Text);// получаем HtmlDocument 
+            // Загружаем HTML-код с указанного URL-адреса
+            string htmlCode = await client.DownloadStringTaskAsync(url);
+            HtmlDocument htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(htmlCode);
 
             var node = htmlDoc.DocumentNode.SelectNodes(xPath);
 
@@ -32,15 +38,15 @@ internal class ParserHtmlAgilityPack
             {
                 var strHref = item.GetAttributeValue("href", null);
 
-                if (!strHref.Contains(domenDonora))//если домена в урле нет то добовлянм
+                if (!strHref.Contains(domenDonora))//если домена в урле нет то добовляем
                     strHref = domenDonora + strHref;
 
-                SqliteServis.AddNews(new News { TitleNews = item.InnerText, LinkNews = item.GetAttributeValue("href", null), UrlDonorNews = url});
+                SqliteServis.AddNews(new News { TitleNews = item.InnerText, LinkNews = item.GetAttributeValue("href", null), UrlDonorNews = url });
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine("НЕ ПОЛУЧИЛОСЬ спарсить  " + url + " " + ex.Message);
+            Console.WriteLine("GetNewsHtmlAgilityPack - не спарсили  " + url + " " + ex.Message);
         }
     }
 

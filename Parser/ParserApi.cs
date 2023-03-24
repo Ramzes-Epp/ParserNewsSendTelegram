@@ -1,21 +1,28 @@
 using Newtonsoft.Json;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-
 namespace ParserNewsSendTelegram.Parser;
 
+/// <summary>
+/// парсер Api сайта Json
+/// </summary>
 internal class ParserApi
 {
     /// <summary>
-    /// парсер Api сайта - через GET запрос
+    /// парсер Api сайта ukr.net - через GET запрос
     /// </summary>
-    internal void GetNews()
+    internal async Task GetNews(string proxy = "")
     {
         // парсим сайт https://www.ukr.net/ajax/start.json через GET запрос - возращаеть обьект JSON  
         string url = @"https://www.ukr.net/ajax/start.json";
         try
         {
-            using HttpClient httpClient = new HttpClient();
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            httpClientHandler.Proxy = new WebProxy(proxy, true);//Устанавливаем прокси если есть
+
+            using HttpClient httpClient = new HttpClient(httpClientHandler);
+
             string requestBody = "";
             using var request = new HttpRequestMessage()
             {
@@ -30,25 +37,25 @@ internal class ParserApi
             request.Headers.Add("Connection", "keep-alive");
             request.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0");
 
-            var resultresponse = httpClient.SendAsync(request).Result;
+            var resultresponse = await httpClient.SendAsync(request);
 
             if (resultresponse.IsSuccessStatusCode)
             {
                 string resultGet = Regex.Unescape(resultresponse.Content.ReadAsStringAsync().Result); //декодируем с Unicode
-                                                                                                      //TODO выпарсить с помощью регул¤рок данные с Json (resultGet) т.к сайт не коретно отдает данные (Json не полный)
+
                 resultGet = resultGet.Replace("\"", "");
                 Console.WriteLine(resultGet);
 
                 if (!string.IsNullOrEmpty(resultGet))
                 {
-                    List<object> items = JsonConvert.DeserializeObject<List<object>>(resultGet); 
+                    List<object> items = JsonConvert.DeserializeObject<List<object>>(resultGet);
                 }
             }
         }
 
         catch (Exception ex)
         {
-            Console.WriteLine("Ќ≈ ѕќЋ”„»Ћќ—№ спарсить  " + url + " " + ex.Message);
+            Console.WriteLine("GetNews - не спарсили  " + url + " " + ex.Message);
         }
     }
 }

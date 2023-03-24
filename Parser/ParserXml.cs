@@ -4,31 +4,39 @@ using System.Net;
 using System.Xml.Linq;
 
 namespace ParserNewsSendTelegram.Parser;
-
+/// <summary>
+/// парсер Rss ленты сайта 
+/// </summary>
 internal class ParserXml
 {
     /// <summary>
-    /// парсер Rss ленты сайта  
+    /// парсер Rss ленты сайта через XML 
     /// </summary>
-    internal static void GetNewsParseXml(string url)
+    /// <param name="url"></param>
+    /// <param name="proxy"></param>
+    /// <returns></returns>
+    internal async Task GetNewsParseXml(string url, string proxy = "")
     {
         try
         {
             using WebClient client = new WebClient();
-            var htmlCode = client.DownloadString(url);//получили html страницы
+            if (proxy != "")
+                client.Proxy = new WebProxy(proxy, true);
+
+            var htmlCode = await client.DownloadStringTaskAsync(url); //получили html страницы
 
             XElement ParsElement = XElement.Parse(htmlCode);//преобразовали в XMl елемент
             var items = ParsElement.Elements("channel").Elements("item");//получаем блок в котором лежат title и link  
 
-            //перебираем коллекцию и добавл¤ем в Ѕƒ данные
+            //перебираем коллекцию и добавл¤ем в бд данные
             foreach (var item in items)
-            { 
+            {
                 SqliteServis.AddNews(new News { TitleNews = item.Element("title").Value, LinkNews = item.Element("link").Value, UrlDonorNews = url });
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Ќ≈ ѕќЋ”„»Ћќ—№ спарсить  " + url + " " + ex.Message);
+            Console.WriteLine(" GetNewsParseXml - не спарсили " + url + " " + ex.Message);
         }
     }
 }

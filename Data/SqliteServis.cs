@@ -1,22 +1,21 @@
 using ParserNewsSendTelegram.Models;
-using System;
 using System.Data.SQLite;
 
 namespace ParserNewsSendTelegram.Data
 {
     /// <summary>
     /// класс для работы с БД SQLite
-    /// </summary>
+    /// </summary>S
     internal class SqliteServis
     {
         readonly static string connection_string = "Data Source=" + Environment.CurrentDirectory + @"\dbnews.sqlite;Version=3;";
-        
+
         /// <summary>
         /// Получить в список все новости
         /// </summary>
         /// <returns></returns>
         internal static List<News> GetAllNews()
-        { 
+        {
             try
             {
                 using (var connection = new SQLiteConnection(connection_string))
@@ -37,7 +36,7 @@ namespace ParserNewsSendTelegram.Data
                                     UrlDonorNews = rdr.GetString(2),
                                     LinkNews = rdr.GetString(3),
                                     DateNews = rdr.GetString(4),
-                                    OpublikovanTelegram = rdr.GetString(5) 
+                                    OpublikovanTelegram = rdr.GetString(5)
                                 });
                             }
 
@@ -71,12 +70,12 @@ namespace ParserNewsSendTelegram.Data
                         Command.Parameters.AddWithValue("UrlDonorNews", news.UrlDonorNews);
                         Command.Parameters.AddWithValue("LinkNews", news.LinkNews);
                         Command.Parameters.AddWithValue("Date", DateTime.Now.ToString("dd-MM-yyyy"));
-                        Command.Parameters.AddWithValue("OpublikovanTelegram", news.OpublikovanTelegram); 
+                        Command.Parameters.AddWithValue("OpublikovanTelegram", news.OpublikovanTelegram);
 
                         connection.Open();
                         Command.ExecuteNonQuery();
                         return true;
-                    } 
+                    }
                 }
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
@@ -96,7 +95,7 @@ namespace ParserNewsSendTelegram.Data
             try
             {
                 using (var connection = new SQLiteConnection(connection_string))
-                { 
+                {
                     string commandText = "UPDATE news SET opublikovan_telegram = 'yes' WHERE id = :id";
                     using (SQLiteCommand Command = new SQLiteCommand(commandText, connection))
                     {
@@ -109,6 +108,6 @@ namespace ParserNewsSendTelegram.Data
             }
             catch (Exception ex) { Console.WriteLine(ex.Message); }
             return false;
-        } 
-    } 
+        }
+    }
 }
